@@ -1,12 +1,11 @@
 <?php
-
+#Declara las url para el "Aut" y el "usuario"
 $url = "https://navisq.puertoangamos.cl/APIWsPortAngTatc/Auth/authenticate";
-// Las credenciales se encuentran en la Guía de Integración
 $user = [
   "username" => "username",
   "password" => "password"
 ];
-
+#Crea el contexto para el request
 $context = stream_context_create([
   "http" => [
     "method" => "POST",
@@ -14,13 +13,14 @@ $context = stream_context_create([
     "content" => json_encode($user)
   ]
 ]);
-
+#Envia la url 
 $response = file_get_contents($url, FALSE, $context);
-
+#Hace el substring para que lea desde la pocision establecida
 $token = substr($response, 48);
+#Hace el quite de comillas dobles y corchetes
 $token = str_replace("\"", "", $token, $count);
 $token = str_replace("}", "", $token, $count);
-
+#Se declara el metodo "EnviarTatc" y de da un objeto como json
 $url = "https://navisq.puertoangamos.cl/APIWsPortAngTatc/PortAngTatc/EnviarTatc";
 $obj = [
   "dcNumeroTatc"            => "100001127",
@@ -47,7 +47,7 @@ $obj = [
   "dgEmisorBl"              => "Navis",
   "dfLiberacion"            => "2022-02-01 08:00:00"
 ];
-
+#Crea el contexto, manda la autorizacion con el post y traduce el json
 $context = stream_context_create([
   "http" => [
     "method" => "POST",
@@ -55,6 +55,6 @@ $context = stream_context_create([
     "content" => json_encode($obj)
   ]
 ]);
-
+#Recibe el metodo e imprime la peticion
 $response = file_get_contents($url, FALSE, $context);
 print($response);
