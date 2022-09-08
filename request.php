@@ -1,11 +1,13 @@
 <?php
-#Declara las url para el "Aut" y el "usuario"
+
+# Declaramos la URL de autenticación y el objeto usuario
 $url = "https://navisq.puertoangamos.cl/APIWsPortAngTatc/Auth/authenticate";
 $user = [
   "username" => "username",
   "password" => "password"
 ];
-#Crea el contexto para el request
+
+# Creamos el contexto con los parametros de la petición
 $context = stream_context_create([
   "http" => [
     "method" => "POST",
@@ -13,15 +15,19 @@ $context = stream_context_create([
     "content" => json_encode($user)
   ]
 ]);
-#Envia la url 
+
+# Enviamos la petición
 $response = file_get_contents($url, FALSE, $context);
-#Hace el substring para que lea desde la pocision establecida
+
+# Limpiamos la respuesta para poder obtener el token de autorización
 $token = substr($response, 48);
-#Hace el quite de comillas dobles y corchetes
 $token = str_replace("\"", "", $token, $count);
 $token = str_replace("}", "", $token, $count);
-#Se declara el metodo "EnviarTatc" y de da un objeto como json
+
+# Reutilizamos la variable URL e inicializamos con el endpoint EnviarTATC
 $url = "https://navisq.puertoangamos.cl/APIWsPortAngTatc/PortAngTatc/EnviarTatc";
+
+# Reutilizamos el objeto para llenar con datos del TATC
 $obj = [
   "dcNumeroTatc"            => "100001127",
   "dcOperadorTatc"          => "C20",
@@ -47,7 +53,8 @@ $obj = [
   "dgEmisorBl"              => "Navis",
   "dfLiberacion"            => "2022-02-01 08:00:00"
 ];
-#Crea el contexto, manda la autorizacion con el post y traduce el json
+
+# Creamos el contexto con los parametros de la petición
 $context = stream_context_create([
   "http" => [
     "method" => "POST",
@@ -55,6 +62,7 @@ $context = stream_context_create([
     "content" => json_encode($obj)
   ]
 ]);
-#Recibe el metodo e imprime la peticion
+
+# Enviamos nuevamente la petición mediante el método POST a la nueva URL e imprimimos la respuesta por consola
 $response = file_get_contents($url, FALSE, $context);
 print($response);
