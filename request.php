@@ -57,4 +57,21 @@ $context = stream_context_create([
 ]);
 
 $response = file_get_contents($url, FALSE, $context);
-print($response);
+print($response."\n");
+
+$url = "https://navisq.puertoangamos.cl/APIWsPortAngTatc/PortAngTatc/AnularTatc";
+$obj = [
+  "dcNumeroTatc"            => "100001127",
+  "dcOperadorTatc"          => "C20"
+];
+
+$context = stream_context_create([
+  "http" => [
+    "method" => "POST",
+    "header" => "Content-Type: application/json,\r\n"."Authorization: Bearer ".$token,
+    "content" => json_encode($obj)
+  ]
+]);
+
+$response = file_get_contents($url, FALSE, $context);
+print($response."\n");
