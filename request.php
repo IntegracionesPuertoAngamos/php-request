@@ -67,12 +67,14 @@ $context = stream_context_create([
 $response = file_get_contents($url, FALSE, $context);
 print($response."\n");
 
+# Reutilizamos la variable URL e inicializamos con el endpoint AnularTATC
 $url = "https://navisq.puertoangamos.cl/APIWsPortAngTatc/PortAngTatc/AnularTatc";
 $obj = [
   "dcNumeroTatc"            => "100001127",
   "dcOperadorTatc"          => "C20"
 ];
 
+# Creamos el contexto con los parametros de la petición
 $context = stream_context_create([
   "http" => [
     "method" => "POST",
@@ -81,5 +83,6 @@ $context = stream_context_create([
   ]
 ]);
 
+# Enviamos nuevamente la petición mediante el método POST a la nueva URL e imprimimos la respuesta por consola
 $response = file_get_contents($url, FALSE, $context);
 print($response."\n");
